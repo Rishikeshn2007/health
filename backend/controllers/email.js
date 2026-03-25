@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../../.env' });
+require('dotenv').config();
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
@@ -22,5 +22,4 @@ async function notifyDriver(driverEmail, patientName, patientPhno, lat, lng) {
   console.log('Email sent successfully!');
 }
 
-// Test
-notifyDriver('rathnan387@gmail.com', 'Sangeetha H', '9876543210', 12.9716, 77.5946);
+module.exports = { notifyDriver };

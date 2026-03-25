@@ -19,6 +19,9 @@ const amb_schema=new mongoose.Schema(
             type: String,
             required: true
         },
+        email: {
+            type: String
+        },
         latitude: {
             type: Number,
             required: true
