@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Emergency First-Step — Demo UI</title>
+  
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --primary:#ef4444; /* red for emphasis */
+      --accent:#2563eb;
+      --success:#10b981;
+      --radius:12px;
+      --gap:14px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--bg);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:20px;
+      display:flex;align-items:flex-start;justify-content:center;
+    }
+
+    .wrap{width:100%;max-width:980px}
+
+    header{
+      display:flex;align-items:center;gap:16px;margin-bottom:18px
+    }
+    .brand{
+      display:flex;flex-direction:column
+    }
+    h1{font-size:20px;margin:0}
+    p.lead{margin:2px 0 0;color:var(--muted);font-size:13px}
+
+    .search-row{display:flex;gap:12px;align-items:center;margin:12px 0}
+    .search{flex:1;background:var(--card);border-radius:10px;padding:10px 12px;border:1px solid #e6e9ef}
+    .search input{border:0;outline:none;width:100%;font-size:14px;background:transparent}
+    .call-btn{background:var(--primary);color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:600}
+    .call-btn:active{background-color: #10b981; color: #e6e9ef;}
+    /* categories grid */
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:var(--gap);margin:8px 0 22px}
+    .card{background:var(--card);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;box-shadow:0 6px 18px rgba(15,23,42,0.06);text-decoration:none;color:inherit}
+    .icon{font-size:26px;width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#fff;border:1px solid #eee}
+    .card h3{margin:0;font-size:15px}
+    .card p{margin:0;color:var(--muted);font-size:13px}
+
+    /* emergency detail section */
+    section.detail{margin-top:24px;background:linear-gradient(180deg,#fff, #fbfdff);border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(15,23,42,0.05)}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;background:rgba(239,68,68,0.12);color:var(--primary)}
+    .severity{float:right;font-weight:700;color:var(--muted);font-size:13px}
+    .steps{margin-top:14px;display:flex;flex-direction:column;gap:10px}
+    .step{background:linear-gradient(180deg,#ffffff,#fbfbff);padding:12px;border-radius:10px;border:1px solid #eef2ff}
+    .step strong{display:block;margin-bottom:6px}
+
+    .actions{display:flex;gap:12px;margin-top:16px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
+    .btn-call{background:var(--primary);color:#fff}
+    .btn-map{background:#fff;border:1px solid #e6e9ef;color:var(--accent)}
+
+    footer{margin-top:20px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* responsive tweaks */
+    @media (max-width:480px){
+      body{padding:12px}
+      h1{font-size:18px}
+      .card{padding:14px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div style="width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#fb923c);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px">EM</div>
+      <div class="brand">
+        <h1>Emergency First‑Step</h1>
+        <p class="lead">Quick, clear actions to take in the first critical minutes</p>
+      </div>
+    </header>
+
+    <div class="search-row" id="search">
+      <div class="search" aria-hidden>
+        <input
+          type="text"
+          id="find"
+          placeholder="Search emergencies, e.g. heart attack"
+          aria-label="Search emergencies"
+        />
+      </div>
+      <button class="call-btn" id="searchButton" type="button">SEARCH</button>
+    </div>
+
+    <!-- Category grid: replace/add items as you like -->
+    <div class="grid" id="grid">
+      <a class="card" href="#heart-attack">
+        <div class="icon">❤️</div>
+        <h3>Heart Attack</h3>
+        <p>Steps to stabilise and call for help</p>
+      </a>
+
+      <a class="card" href="#choking">
+        <div class="icon">🫁</div>
+        <h3>Choking</h3>
+        <p>How to remove airway obstruction quickly</p>
+      </a>
+
+      <a class="card" href="#burns">
+        <div class="icon">🔥</div>
+        <h3>Burns</h3>
+        <p>Cool, protect and when to seek help</p>
+      </a>
+
+      <a class="card" href="#bleeding">
+        <div class="icon">🩸</div>
+        <h3>Severe Bleeding</h3>
+        <p>Apply pressure, elevate and stop the bleed</p>
+      </a>
+
+      <a class="card" href="#drowning">
+        <div class="icon">🌊</div>
+        <h3>Drowning</h3>
+        <p>Remove, clear airway, start rescue breathing</p>
+      </a>
+
+      <a class="card" href="#snakebite">
+        <div class="icon">🐍</div>
+        <h3>Snake Bite</h3>
+        <p>Keep limb still, don't cut or suck; get to hospital</p>
+      </a>
+    </div>
+
+    <!-- For dynamic searches -->
+    <section id="all" class="detail" style="display: none;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <span class="badge" id="name"></span>
+          <h2 style="margin:8px 0 0" id="todo"></h2>
+        </div>
+        <div class="severity" id="stage"></div>
+        </div>
+      <div class="steps" id="steps">
+        <ul>
+          <li id="step1"></li>
+          <li id="step2"></li>
+          <li id="step3"></li>
+          <li id="step4"></li>
+          <li id="step5"></li>
+        </ul>
+      </div>
+      <div class="actions">
+        <a class="btn btn-call" href="tel:112">📞 Call 112</a>
+       
+        <a class="btn btn-map" href="https://www.google.com/maps/search/hospital+near+me" target="_blank" rel="noopener">📍 Find nearby hospital</a>
+      </div>
+    </section>
+    <!--End of dynamic-->
+
+    <div id="stat">
+    <section id="heart-attack" class="detail">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <span class="badge">Heart Attack</span>
+          <h2 style="margin:8px 0 0">Recognise & Act</h2>
+        </div>
+        <div class="severity">Critical • Call Ambulance</div>
+        </div>
+      <div class="steps">
+        <div class="step">
+          <strong>1. Call emergency services immediately</strong>
+          <div>Dial the local emergency number (112/911). Do this first.</div>
+        </div>
+        <div class="step">
+          <strong>2. Help the person sit upright</strong>
+          <div>Keep them calm and comfortable; loosen tight clothing.</div>
+        </div>
+        <div class="step">
+          <strong>3. Ask about medication (e.g., nitroglycerin)</strong>
+          <div>If present, help them take it—but do not give other medicines.</div>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn btn-call" href="tel:112">📞 Call 112</a>
+         <a class="btn btn-call" href="https://youtube.com/shorts/9HeRaGW3fyo?si=pnDoCPR_MK6r_Xzj">first-aid</a>
+
+        <a class="btn btn-map" href="https://www.google.com/maps/search/hospital+near+me" target="_blank" rel="noopener">📍 Find nearby hospital</a>
+      </div>
+    </section>
+
+    <!--START FROM HERE-->
+    <section id="choking" class="detail">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <span class="badge">Choking</span>
+          <h2 style="margin:8px 0 0">Clear the Airway</h2>
+        </div>
+        <div class="severity">Severe • Act Fast</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <strong>1. Encourage coughing</strong>
+          <div>If they can cough, let them try to clear the airway.</div>
+        </div>
+        <div class="step">
+          <strong>2. Back blows and abdominal thrusts</strong>
+          <div>Perform five back blows, then five abdominal thrusts (Heimlich) if trained.</div>
+        </div>
+        <div class="step">
+          <strong>3. Call emergency services if not improving</strong>
+          <div>Get professional help immediately.</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-call" href="tel:112">📞 Call 112</a>
+         <a class="btn btn-call" href="https://youtube.com/shorts/Qko1Ajrp1Sw?si=6SLswkuJ98yF0xJQ">first-aid</a>
+
+        <a class="btn btn-map" href="https://www.google.com/maps/search/hospital+near+me" target="_blank" rel="noopener">📍 Find nearby hospital</a>
+      </div>
+    </section>
+<!--End here-->
+ <section id="burns" class="detail">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <span class="badge">Burn</span>
+          <h2 style="margin:8px 0 0">Cool the burn — Don’t apply anything else first.</h2>
+        </div>
+        <div class="severity">Severe • Act Fast</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <strong>1️⃣ Move away from the source of heat</strong>
+          <div>→ Stop contact with fire, hot object, chemical, or electricity..</div>
+        </div>
+        <div class="step">
+          <strong>2️⃣ Cool the burn immediately</strong>
+          <div>→ Use cool running water for 20 minutes
+→ Do NOT use ice or very cold water (can damage skin more)</div>
+        </div>
+        <div class="step">
+          <strong>3️⃣ Remove tight items carefully
+</strong>
+          <div>→ Rings, watches, tight clothes before swelling starts
+(Do NOT remove stuck clothing).</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-call" href="tel:112">📞 Call 112</a>
+         <a class="btn btn-call" href="https://youtube.com/shorts/3mKo-HBDsQI?si=-Df7o8ox5X-PSK0S">first-aid</a>
+
+        <a class="btn btn-map" href="https://www.google.com/maps/search/hospital+near+me" target="_blank" rel="noopener">📍 Find nearby hospital</a>
+      </div>
+      </section>
+      <!--bleeding-->
+ <section id="bleeding" class="detail">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <span class="badge">Bleeding</span>
+          <h2 style="margin:8px 0 0">Apply firm direct pressure on the wound to stop bleeding.</h2>
+        </div>
+        <div class="severity">Severe • Act Fast</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <strong>1️⃣ Apply direct pressure on the wound</strong>
+          <div>→ Use a clean cloth, bandage, or even your hand if nothing else is available.</div>
+        </div>
+        <div class="step">
+          <strong>2️⃣ Keep the injured part elevated</strong>
+          <div>→ Raise it above heart level to reduce bleeding.</div>
+        </div>
+        <div class="step">
+          <strong>3️⃣ Press around the wound if something is stuck inside</strong>
+          <div>→ Do not remove objects like glass or metal.</div>
+           <div class="step">
+          <strong>4️⃣ Cover the wound with sterile dressing</strong>
+          <div>→Maintain firm pressure.</div>
+        </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-call" href="tel:112">📞 Call 112</a>
+         <a class="btn btn-call" href="https://youtube.com/shorts/OpsP9BQBm6k?si=8LioUUJ5wTpD6msJ">first-aid</a>
+
+        <a class="btn btn-map" href="https://www.google.com/maps/search/hospital+near+me" target="_blank" rel="noopener">📍 Find nearby hospital</a>
+      </div>
+    </section>
+  <!--drowing-->
+   <section id="drowning" class="detail">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <span class="badge">Drowning</span>
+          <h2 style="margin:8px 0 0">Get the person out of the water and check if they are breathing.</h2>
+        </div>
+        <div class="severity">Severe • Act Fast</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <strong>1️⃣ Start CPR if they are not breathing</strong>
+          <div>→ Press the chest hard and fast
+→ Give rescue breaths if trained</div>
+        </div>
+        <div class="step">
+          <strong>2️⃣ Call emergency services immediately</strong>
+          <div>→ Get medical help as fast as possible</div>
+        </div>
+        <div class="step">
+          <strong>3️⃣ Keep the person warm & calm</strong>
+          <div>→ Cover with a towel/cloth to prevent shock
+→ Let them rest on their side if they are breathing (recovery position)</div>
+        </div>
+        <div>
+          
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-call" href="tel:112">📞 Call 112</a>
+          <a class="btn btn-call" href="https://youtu.be/_7mQaLa3tDs?si=eX8oXn0rK9b8pO3m">first-aid</a>
+
+        <a class="btn btn-map" href="https://www.google.com/maps/search/hospital+near+me" target="_blank" rel="noopener">📍 Find nearby hospital</a>
+      </div>
+    </section>
+    <!--snake bite-->
+     <section id="snakebite" class="detail">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+        <div>
+          <span class="badge">Snake bite</span>
+          <h2 style="margin:8px 0 0">Keep the person calm and the bitten limb still.</h2>
+        </div>
+        <div class="severity">Severe • Act Fast</div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <strong>1️⃣ Call Emergency Help Immediately</strong>
+          <div>→ Faster hospital treatment = higher survival chance</div>
+        </div>
+        <div class="step">
+          <strong>2️⃣ Keep the bite area below heart level</strong>
+          <div>→ Prevents venom from moving upward into vital organs</div>
+        </div>
+        <div class="step">
+          <strong>3️⃣ Apply a pressure bandage around the limb (not tight)
+</strong>
+          <div>→ Slows venom spread
+→ But do not cut blood supply
+
+</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn btn-call" href="tel:112">📞 Call 112</a>
+         <a class="btn btn-call" href="https://youtube.com/shorts/YzYz_LlqGP4?si=dHxLoTjJWUFfwr1q">first-aid</a>
+
+        <a class="btn btn-map" href="https://www.google.com/maps/search/hospital+near+me" target="_blank" rel="noopener">📍 Find nearby hospital</a>
+      </div>
+    </section>
+    </div>
+    <footer>
+      Tip: Keep this page simple and follow the steps. Add more emergencies in the category grid above.
+    </footer>
+  </div>
+  <script src="/frontend/js/emergency.js"></script>
+</body>
+</html>
