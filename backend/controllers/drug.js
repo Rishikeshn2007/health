@@ -1,32 +1,32 @@
-const drugService = require('../services/drugService');
+const { fetchDrugId } = require('../services/drugService');
 
-const handleDrugSearch = async (req, res) => {
-    try {
-        const { name } = req.query;
+async function handleDrugSearch(req, res) {
+  const { name } = req.query;
 
-        if (!name) {
-            return res.status(400).json({ success: false, message: "Drug name is required" });
-        }
+  if (!name) {
+    return res.status(400).json({
+      error: 'Drug name is required'
+    });
+  }
 
-        // INTEGRATION: Calling the service layer
-        const rxcui = await drugService.fetchDrugId(name);
+  try {
+    const drugId = await fetchDrugId(name);
 
-        if (!rxcui) {
-            return res.status(404).json({ success: false, message: "Medication not found" });
-        }
-
-        // Returning the standardized ID to the frontend
-        return res.status(200).json({
-            success: true,
-            data: {
-                inputName: name,
-                rxnormId: rxcui
-            }
-        });
-
-    } catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
+    if (!drugId) {
+      return res.status(404).json({
+        error: 'Drug not found'
+      });
     }
-};
+
+    return res.status(200).json({
+      name,
+      drugId
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message || 'Failed to search drug'
+    });
+  }
+}
 
 module.exports = { handleDrugSearch };
