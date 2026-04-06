@@ -1,9 +1,10 @@
+
 # Health
 
 Health is a Node.js and Express project focused on emergency support features. It includes a simple emergency guidance frontend, a drug lookup API, and an ambulance allocation flow that finds the nearest available ambulance, marks it as booked, and notifies the assigned driver by email.
 
 ## Features
-
+-----
 - Emergency first-aid page in `frontend/html/emergency.html`
 - Ambulance allocation using requester coordinates and stored ambulance locations
 - Driver email notification after ambulance assignment
